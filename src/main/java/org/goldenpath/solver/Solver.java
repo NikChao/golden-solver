@@ -65,8 +65,8 @@ public class Solver extends Application {
 
             var resultAlert = new Alert(Alert.AlertType.INFORMATION);
             resultAlert.setTitle("Solution");
-
             resultAlert.setContentText("OOP should:\nFold: , Call: , Raise:\n\nIP should:\nFold: , Call: , Raise:");
+            resultAlert.show();
         });
 
         var vbox = new VBox(24); // 10px spacing between elements
