@@ -32,5 +32,5 @@ tasks.test {
 }
 
 application {
-    mainClass.set("Main") // Set the main class for the application
+    mainClass.set("org.goldenpath.solver.Main") // Set the main class for the application
 }
