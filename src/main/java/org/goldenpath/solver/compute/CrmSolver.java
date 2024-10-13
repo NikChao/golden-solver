@@ -1,6 +1,7 @@
 package org.goldenpath.solver.compute;
 
 import org.goldenpath.solver.compute.model.CrmInput;
+import org.goldenpath.solver.compute.model.GameTree;
 
 /**
  * Counterfactual regret minimization solver
@@ -12,7 +13,9 @@ public class CrmSolver {
         this.handResolver = handResolver;
     }
 
-    public void solve(CrmInput input) {
+    public GameTree solve(CrmInput input) {
         System.out.println("Solving!");
+
+        return null;
     }
 }
