@@ -62,6 +62,11 @@ public class Solver extends Application {
             var solver = new CrmSolver(new HandResolver());
             var solverInput = crmInputConverter.toCrmInput(oopRanges, oopParams, ipRanges, ipParams, otherParams, board);
             var result = solver.solve(solverInput);
+
+            var resultAlert = new Alert(Alert.AlertType.INFORMATION);
+            resultAlert.setTitle("Solution");
+
+            resultAlert.setContentText("OOP should:\nFold: , Call: , Raise:\n\nIP should:\nFold: , Call: , Raise:");
         });
 
         var vbox = new VBox(24); // 10px spacing between elements

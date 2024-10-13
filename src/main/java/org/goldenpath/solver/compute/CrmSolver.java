@@ -25,8 +25,8 @@ public class CrmSolver {
 
     // The method that performs the CRM algorithm
     public Map<String, Map<String, double[]>> solve(CrmInput input, int iterations) {
-        PlayerParams oopPlayer = input.players()[0];
-        PlayerParams ipPlayer = input.players()[1];
+        var oopPlayer = input.players()[0];
+        var ipPlayer = input.players()[1];
 
         Map<String, Map<String, double[]>> strategyProfile = new HashMap<>();
 
