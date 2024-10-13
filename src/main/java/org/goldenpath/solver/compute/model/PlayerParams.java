@@ -1,7 +1,7 @@
 package org.goldenpath.solver.compute.model;
 
 public record PlayerParams(
-        String range,
+        String[] range,
         double[] flopBetSizes,
         double[] flopRaiseSizes,
         double[] turnBetSizes,

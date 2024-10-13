@@ -3,11 +3,10 @@ package org.goldenpath.solver;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -17,9 +16,7 @@ import org.goldenpath.solver.compute.HandResolver;
 import org.goldenpath.solver.compute.RangeProvider;
 import org.goldenpath.solver.data.CrmInputConverter;
 
-import java.awt.*;
 import java.lang.reflect.Method;
-import java.net.URL;
 
 public class Solver extends Application {
     private final HandResolver handResolver = new HandResolver();
@@ -55,9 +52,16 @@ public class Solver extends Application {
         var solveButton = new Button("Find solution");
         solveButton.setStyle("-fx-start-margin: 24px;");
         solveButton.setOnMouseClicked((MouseEvent event) -> {
+            if (board.getBoard().isBlank()) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error solving");
+                alert.setContentText("Please input board before continuing.");
+                alert.show();
+                return;
+            }
             var solver = new CrmSolver(new HandResolver());
             var solverInput = crmInputConverter.toCrmInput(oopRanges, oopParams, ipRanges, ipParams, otherParams, board);
-            solver.solve(solverInput);
+            var result = solver.solve(solverInput);
         });
 
         var vbox = new VBox(24); // 10px spacing between elements

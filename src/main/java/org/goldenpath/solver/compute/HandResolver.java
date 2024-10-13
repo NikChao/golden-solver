@@ -14,6 +14,10 @@ public class HandResolver {
         String[] oopCombined = combineHandsAndBoard(oopHand, board);
         var oopCombinedValues = new ArrayList<Integer>();
         for (String oopCard : oopCombined) {
+            if (oopCard == null || oopCard.length() == 0) {
+                continue;
+            }
+
             var rank = oopCard.charAt(0);
             var rankValue = getCardValue(rank);
             oopCombinedValues.add(rankValue);
@@ -23,6 +27,10 @@ public class HandResolver {
         String[] ipCombined = combineHandsAndBoard(ipHand, board);
         var ipCombinedValues = new ArrayList<Integer>();
         for (String ipCard : ipCombined) {
+            if (ipCard == null || ipCard.length() == 0) {
+                continue;
+            }
+
             var rank = ipCard.charAt(0);
             var rankValue = getCardValue(rank);
             ipCombinedValues.add(rankValue);
@@ -73,6 +81,10 @@ public class HandResolver {
                 's', new int[13])));
 
         for (String card : cards) {
+            if (card == null || card.length() == 0) {
+                continue;
+            }
+
             var rank = card.charAt(0);
             var suit = card.charAt(1);
             var rankValue = getCardValue(rank);
