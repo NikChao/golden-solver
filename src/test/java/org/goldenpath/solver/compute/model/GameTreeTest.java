@@ -2,6 +2,9 @@ package org.goldenpath.solver.compute.model;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class GameTreeTest {
     private static final String TIGHT_RANGE_TEXT = "AhAd,AhAc,AhAs,AdAc,AdAs,AcAs,KhKd,KhKc,KhKs,KdKc,KdKs,KcKs," +
             "QhQd,QhQc,QhQs,QdQc,QdQs,QcQs,AhKh,AdKd,AcKc,AsKs,JhJd,JhJc,JhJs,JdJc,JdJs,JcJs,AhQh,AdQd,AcQc," +
@@ -21,5 +24,9 @@ public class GameTreeTest {
         var input = new CrmInput(players, 3, 50, 200, 0.67, boardCards);
 
         var gameTree = new GameTree(input);
+
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.street, GameTree.Street.FLOP);
+        assertEquals(gameTree.children.length, 3);
     }
 }
