@@ -61,4 +61,99 @@ public class GameTreeTest {
         // After checking back the river there should be no more game to play
         assertNull(ipCheckRiver.children);
     }
+
+    @Test
+    public void testGameTreeCallStationPot() {
+        var oop = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
+        var ip = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
+        var players = new PlayerParams[]{oop, ip};
+        var boardCards = new String[]{"Qh", "5c", "8d"};
+
+        var input = new CrmInput(players, 3, 50, 200, 0.67, boardCards);
+
+        var gameTree = new GameTree(input);
+
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.street, GameTree.Street.FLOP);
+        assertEquals(gameTree.children.length, 3);
+        assertEquals(gameTree.pot, 50);
+
+        var oopBetFlop = gameTree.children[1];
+        assertEquals(GameTree.ActionType.BET, oopBetFlop.action.type());
+        assertEquals(oopBetFlop.pot, 65);
+
+        var ipCallFlop = oopBetFlop.children[1];
+        assertEquals(GameTree.ActionType.CALL, ipCallFlop.action.type());
+        assertEquals(ipCallFlop.pot, 80);
+
+        var turnCard = ipCallFlop.children[0];
+        assertEquals(GameTree.ActionType.CARD, turnCard.action.type());
+
+        var startTurn = turnCard.children[0];
+        assertEquals(GameTree.ActionType.START, startTurn.action.type());
+
+        var oopBetTurn = startTurn.children[1];
+        assertEquals(GameTree.ActionType.BET, oopBetTurn.action.type());
+        assertEquals(oopBetTurn.pot, 104);
+
+        var ipCallTurn = oopBetTurn.children[1];
+        assertEquals(GameTree.ActionType.CALL, ipCallTurn.action.type());
+        assertEquals(ipCallTurn.pot, 128);
+
+        var river = ipCallTurn.children[0];
+        assertEquals(GameTree.ActionType.CARD, river.action.type());
+
+        var startRiver = river.children[0];
+        assertEquals(GameTree.ActionType.START, startRiver.action.type());
+
+        var oopBetRiver = startRiver.children[1];
+        assertEquals(GameTree.ActionType.BET, oopBetRiver.action.type());
+        assertEquals(oopBetRiver.pot, 166);
+
+        var ipCallRiver = oopBetRiver.children[1];
+        assertEquals(GameTree.ActionType.CALL, ipCallRiver.action.type());
+        assertEquals(ipCallRiver.pot, 204);
+    }
+
+    @Test
+    public void testGameTreeFourBetLimitWhenRaisingFlop() {
+        var oop = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
+        var ip = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
+        var players = new PlayerParams[]{oop, ip};
+        var boardCards = new String[]{"Qh", "5c", "8d"};
+
+        var input = new CrmInput(players, 3, 50, 200, 0.67, boardCards);
+
+        var gameTree = new GameTree(input);
+
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.street, GameTree.Street.FLOP);
+        assertEquals(gameTree.children.length, 3);
+        assertEquals(gameTree.pot, 50);
+
+        var oopBetFlop = gameTree.children[1];
+        assertEquals(GameTree.ActionType.BET, oopBetFlop.action.type());
+        assertEquals(oopBetFlop.pot, 65);
+
+        var ipRaiseFlop = oopBetFlop.children[2];
+        assertEquals(GameTree.ActionType.RAISE, ipRaiseFlop.action.type());
+        assertEquals(ipRaiseFlop.pot, 98);
+
+        var oopReRaiseFlop = ipRaiseFlop.children[2];
+        assertEquals(GameTree.ActionType.RAISE, oopReRaiseFlop.action.type());
+        assertEquals(oopReRaiseFlop.pot, 147);
+
+        var ipThreeBetFlop = oopReRaiseFlop.children[2];
+        assertEquals(GameTree.ActionType.RAISE, ipThreeBetFlop.action.type());
+        assertEquals(ipThreeBetFlop.pot, 221);
+
+        var oopFourBetPot = ipThreeBetFlop.children[2];
+        assertEquals(GameTree.ActionType.RAISE, oopFourBetPot.action.type());
+        assertEquals(oopFourBetPot.pot, 357);
+
+        // End of re-raise limit
+        assertEquals(oopFourBetPot.children.length, 2);
+        assertEquals(oopFourBetPot.children[0].action.type(), GameTree.ActionType.FOLD);
+        assertEquals(oopFourBetPot.children[1].action.type(), GameTree.ActionType.CALL);
+    }
 }

@@ -34,6 +34,7 @@ public class GameTree {
             5, Street.RIVER
     );
 
+    public GameTree parent;
     public double pot;
     public double betToMatch = 0;
     public int playerToAct = 0;
@@ -49,6 +50,7 @@ public class GameTree {
         this.board = input.boardCards();
         this.street = STREET_MAP.getOrDefault(board.length, Street.PREFLOP);
         this.lastPlayerToAct = input.players().length - 1;
+        this.parent = null;
 
         var playerActions = getActions(input);
 
@@ -67,6 +69,7 @@ public class GameTree {
         this.betToMatch = action.amount;
         this.playerToAct = playerToAct;
         this.lastPlayerToAct = lastPlayerToAct;
+        this.parent = parent;
 
         if (input.players()[playerToAct].stack() <= 0) return;
 
@@ -89,6 +92,7 @@ public class GameTree {
     public GameTree(CrmInput input, GameTree parent, String card) {
         this.action = new Action(ActionType.CARD, 0, card);
         this.street = parent.nextStreet();
+        this.parent = parent;
 
         var nextInput = toNewInput(input, action);
 
@@ -108,14 +112,17 @@ public class GameTree {
             playerActions.add(new Action(ActionType.CALL, betToMatch, null));
 
             var hasAllInned = false;
-            for (var raiseSize : getRaiseSizes(player, street)) {
-                var absoluteBet = Math.round(raiseSize * pot);
-                var allinThreshold = player.stack() * input.allinThreshold();
-                if (absoluteBet >= allinThreshold) {
-                    playerActions.add(new Action(ActionType.RAISE, player.stack(), null));
-                    hasAllInned = true;
-                } else {
-                    playerActions.add(new Action(ActionType.RAISE, absoluteBet, null));
+            var previousRaiseCount = getPreviousRaiseCount(parent);
+            if (previousRaiseCount < input.raiseLimit()) {
+                for (var raiseSize : getRaiseSizes(player, street)) {
+                    var absoluteBet = Math.round(raiseSize * pot);
+                    var allinThreshold = player.stack() * input.allinThreshold();
+                    if (absoluteBet >= allinThreshold) {
+                        playerActions.add(new Action(ActionType.RAISE, player.stack(), null));
+                        hasAllInned = true;
+                    } else {
+                        playerActions.add(new Action(ActionType.RAISE, absoluteBet, null));
+                    }
                 }
             }
         } else {
@@ -234,5 +241,21 @@ public class GameTree {
 
     private static Street toStreet(GameTree parent, Action action) {
         return parent.street;
+    }
+
+    private static int getPreviousRaiseCount(GameTree tree) {
+        int i = 0;
+
+        GameTree currentTree = tree;
+        while (currentTree != null) {
+            if (currentTree.action.type == ActionType.RAISE) {
+                i++;
+                currentTree = currentTree.parent;
+            } else {
+                break;
+            }
+        }
+
+        return i;
     }
 }
