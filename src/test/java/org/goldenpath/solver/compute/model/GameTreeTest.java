@@ -24,7 +24,7 @@ public class GameTreeTest {
 
         var gameTree = new GameTree(input);
 
-        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START_STREET);
         assertEquals(gameTree.street, GameTree.Street.FLOP);
         assertEquals(gameTree.children.length, 3);
 
@@ -38,7 +38,7 @@ public class GameTreeTest {
         assertEquals(GameTree.ActionType.CARD, turnCard.action.type());
 
         var startTurn = turnCard.children[0];
-        assertEquals(GameTree.ActionType.START, startTurn.action.type());
+        assertEquals(GameTree.ActionType.START_STREET, startTurn.action.type());
 
         var oopCheckTurn = startTurn.children[0];
         assertEquals(GameTree.ActionType.CHECK, oopCheckTurn.action.type());
@@ -50,7 +50,7 @@ public class GameTreeTest {
         assertEquals(GameTree.ActionType.CARD, river.action.type());
 
         var startRiver = river.children[0];
-        assertEquals(GameTree.ActionType.START, startRiver.action.type());
+        assertEquals(GameTree.ActionType.START_STREET, startRiver.action.type());
 
         var oopCheckRiver = startRiver.children[0];
         assertEquals(GameTree.ActionType.CHECK, oopCheckRiver.action.type());
@@ -73,7 +73,7 @@ public class GameTreeTest {
 
         var gameTree = new GameTree(input);
 
-        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START_STREET);
         assertEquals(gameTree.street, GameTree.Street.FLOP);
         assertEquals(gameTree.children.length, 3);
         assertEquals(gameTree.pot, 50);
@@ -90,7 +90,7 @@ public class GameTreeTest {
         assertEquals(GameTree.ActionType.CARD, turnCard.action.type());
 
         var startTurn = turnCard.children[0];
-        assertEquals(GameTree.ActionType.START, startTurn.action.type());
+        assertEquals(GameTree.ActionType.START_STREET, startTurn.action.type());
 
         var oopBetTurn = startTurn.children[1];
         assertEquals(GameTree.ActionType.BET, oopBetTurn.action.type());
@@ -104,7 +104,7 @@ public class GameTreeTest {
         assertEquals(GameTree.ActionType.CARD, river.action.type());
 
         var startRiver = river.children[0];
-        assertEquals(GameTree.ActionType.START, startRiver.action.type());
+        assertEquals(GameTree.ActionType.START_STREET, startRiver.action.type());
 
         var oopBetRiver = startRiver.children[1];
         assertEquals(GameTree.ActionType.BET, oopBetRiver.action.type());
@@ -126,7 +126,7 @@ public class GameTreeTest {
 
         var gameTree = new GameTree(input);
 
-        assertEquals(gameTree.action.type(), GameTree.ActionType.START);
+        assertEquals(gameTree.action.type(), GameTree.ActionType.START_STREET);
         assertEquals(gameTree.street, GameTree.Street.FLOP);
         assertEquals(gameTree.children.length, 3);
         assertEquals(gameTree.pot, 50);

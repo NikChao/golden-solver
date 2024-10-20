@@ -15,7 +15,7 @@ public class GameTree {
     }
 
     public enum ActionType {
-        START,
+        START_STREET,
         CHECK,
         BET,
         RAISE,
@@ -45,7 +45,7 @@ public class GameTree {
     public int lastPlayerToAct;
 
     public GameTree(CrmInput input) {
-        this.action = new Action(ActionType.START, 0, null);
+        this.action = new Action(ActionType.START_STREET, 0, null);
         this.pot = input.pot();
         this.board = input.boardCards();
         this.street = STREET_MAP.getOrDefault(board.length, Street.PREFLOP);
