@@ -11,6 +11,6 @@ public record CrmInput(
         int effectiveStack,
         double allinThreshold,
 
-        String boardCards
+        String[] boardCards
 ) {
 }

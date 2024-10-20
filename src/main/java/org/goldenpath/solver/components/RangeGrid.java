@@ -50,6 +50,10 @@ public class RangeGrid {
     }
 
     public Pane getRangeGrid() {
+        return getRangeGrid(true);
+    }
+
+    public Pane getRangeGrid(boolean showRangeLabel) {
         // Create a GridPane to hold the poker hands chart
         var gridPane = new GridPane();
 
@@ -83,7 +87,9 @@ public class RangeGrid {
         rangesLabel.setWrapText(false);
         rangesLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
 
-        rangeRow.getChildren().addAll(rangesLabel, spacer, copyRangeButton);
+        if (showRangeLabel) {
+            rangeRow.getChildren().addAll(rangesLabel, spacer, copyRangeButton);
+        }
 
 
         // Create a slider with a range from 1 to 100
@@ -158,7 +164,7 @@ public class RangeGrid {
                 // Filled rectangle (to represent frequency, vertically)
                 var fill = new Rectangle(40, 20 * frequency); // Adjust height based on frequency
                 fill.setFill(Color.GREEN);
-                fill.setTranslateY(20 * (1 - frequency)); // Adjust the position to start from the bottom
+                fill.setTranslateY(10 * (1 - frequency)); // Adjust the position to start from the bottom
 
                 handLabel.stackPane.getChildren().setAll(background, fill, handLabel.label);
             } else {

@@ -208,7 +208,7 @@ public class HandResolverTest {
     }
 
     @Test
-    public void aceToFiveFlush() {
+    public void aceToFiveStraight() {
         var inPositionHand = new String[]{"Ad", "5h"};
         var outOfPositionHand = new String[]{"2c", "3c"};
         var board = new String[]{"2s", "3d", "4c", "Jh", "Th"};
@@ -223,6 +223,39 @@ public class HandResolverTest {
         var inPositionHand = new String[]{"Ad", "5d"};
         var outOfPositionHand = new String[]{"2c", "4h"};
         var board = new String[]{"2d", "3d", "4d", "4c", "4s"};
+
+        var result = sut.compareHands(outOfPositionHand, inPositionHand, board);
+
+        assertEquals(result, HandResolver.Player.InPosition);
+    }
+
+    @Test
+    public void pocketKingsFlush() {
+        var inPositionHand = new String[]{"Kh", "Kd"};
+        var outOfPositionHand = new String[]{"Kc", "Ks"};
+        var board = new String[]{"7s", "3s", "4s", "8s", "Ah"};
+
+        var result = sut.compareHands(outOfPositionHand, inPositionHand, board);
+
+        assertEquals(result, HandResolver.Player.OutOfPosition);
+    }
+
+    @Test
+    public void pocketKingsVsAcesBoardStraightFlush() {
+        var inPositionHand = new String[]{"Kh", "Kd"};
+        var outOfPositionHand = new String[]{"Ah", "Ad"};
+        var board = new String[]{"3h", "4h", "5h", "6h", "7h"};
+
+        var result = sut.compareHands(outOfPositionHand, inPositionHand, board);
+
+        assertEquals(result, HandResolver.Player.Chop);
+    }
+
+    @Test
+    public void testBoatOverBoat() {
+        var inPositionHand = new String[]{"As", "Ts"};
+        var outOfPositionHand = new String[]{"Qh", "Qd"};
+        var board = new String[]{"Kh", "Kc", "Kd", "Th", "Ad"};
 
         var result = sut.compareHands(outOfPositionHand, inPositionHand, board);
 

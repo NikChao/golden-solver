@@ -3,24 +3,26 @@ package org.goldenpath.solver;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.goldenpath.solver.components.*;
 import org.goldenpath.solver.compute.CrmSolver;
+import org.goldenpath.solver.compute.EquityCalculator;
 import org.goldenpath.solver.compute.HandResolver;
 import org.goldenpath.solver.compute.RangeProvider;
 import org.goldenpath.solver.data.CrmInputConverter;
+import org.goldenpath.solver.data.RangeConverter;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public class Solver extends Application {
+    private final RangeConverter rangeConverter = new RangeConverter();
     private final HandResolver handResolver = new HandResolver();
-    private final CrmInputConverter crmInputConverter = new CrmInputConverter();
+    private final CrmInputConverter crmInputConverter = new CrmInputConverter(rangeConverter);
 
     private final double initialOopRange = 30;
     private final double initialIpRange = 50;
@@ -65,7 +67,48 @@ public class Solver extends Application {
 
             var resultAlert = new Alert(Alert.AlertType.INFORMATION);
             resultAlert.setTitle("Solution");
-            resultAlert.setContentText("OOP should:\nFold: , Call: , Raise:\n\nIP should:\nFold: , Call: , Raise:");
+            var contents = new StringBuilder();
+            contents.append("OOP should:\n");
+            var keys = Arrays.copyOfRange(result.get("oop").keySet().toArray(), 0, 30);
+            for (var key : keys) {
+                var recommendation = result.get("oop").get(key);
+                var check = Math.round(recommendation[1] * 100);
+                var bet = Math.round(recommendation[2] * 100);
+
+                var line = new StringBuilder()
+                        .append(key + " - ")
+                        .append("Check: ")
+                        .append(check)
+                        .append("%, Bet: ")
+                        .append(bet)
+                        .append("%\n")
+                        .toString();
+                contents.append(line);
+            }
+
+            contents.append("IP should:\n");
+            for (var key : keys) {
+                var recommendation = result.get("ip").get(key);
+                var fold = Math.round(recommendation[0] * 100);
+                var call = Math.round(recommendation[1] * 100);
+                var raise = Math.round(recommendation[2] * 100);
+
+                var line = new StringBuilder()
+                        .append(key + " - ")
+                        .append("Fold: ")
+                        .append(fold)
+                        .append("%, Call: ")
+                        .append(call)
+                        .append("%, Bet: ")
+                        .append(raise)
+                        .append("%\n")
+                        .toString();
+                contents.append(line);
+            }
+
+            resultAlert.setHeaderText("Solution");
+            resultAlert.setContentText(contents.toString());
+            resultAlert.setWidth(800);
             resultAlert.show();
         });
 
@@ -81,14 +124,24 @@ public class Solver extends Application {
                 otherParams.render(),
                 solveButton);
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(vbox);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ScrollPane solverScrollPane = new ScrollPane();
+        solverScrollPane.setContent(vbox);
+        solverScrollPane.setFitToWidth(true);
+        solverScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        solverScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+        var equityCalculator = new EquityCalculator(handResolver);
+        var villainRangeProvider = new RangeProvider();
+        var villainRangeGrid = new RangeGrid("Villain Range", villainRangeProvider, 0.5);
+        var equityLab = new EquityLab(equityCalculator, villainRangeGrid, villainRangeProvider, rangeConverter);
 
-        var scene = new Scene(scrollPane, 300, 200);
+        var solverTab = new Tab("Solver", solverScrollPane);
+        var equityTab = new Tab("Equity", equityLab.render());
+        var tabPane = new TabPane();
+        tabPane.getTabs().addAll(equityTab, solverTab);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        var scene = new Scene(tabPane, 300, 200);
 
         // Set up the stage (window)
         primaryStage.setTitle("Solver");

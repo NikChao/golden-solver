@@ -29,7 +29,8 @@ public class CrmInputConverterTest {
     @Mock
     private Board board;
 
-    private final CrmInputConverter sut = new CrmInputConverter();
+    private final RangeConverter rangeConverter = new RangeConverter();
+    private final CrmInputConverter sut = new CrmInputConverter(rangeConverter);
 
     @BeforeEach
     public void setup() {
@@ -48,6 +49,7 @@ public class CrmInputConverterTest {
                 "0.67"
         );
         Mockito.when(otherParams.getValues()).thenReturn(otherParamValues);
+        Mockito.when(board.getBoard()).thenReturn("Qh,Js,8c");
     }
 
     @Test

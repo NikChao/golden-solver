@@ -46,8 +46,8 @@ public class HandResolver {
             return Player.OutOfPosition;
         } else if (ipStrength > oopStrength) {
             return Player.InPosition;
-        } else {
-            // Kicker comparison
+        } else if (oopStrength < 4) {
+            // Kicker comparison for trips & pairs
             for (int i = 0; i < 4; i++) {
                 if (oopCombinedValues.get(i) > ipCombinedValues.get(i)) {
                     return Player.OutOfPosition;
@@ -55,9 +55,9 @@ public class HandResolver {
                     return Player.InPosition;
                 }
             }
-
-            return Player.Chop;
         }
+
+        return Player.Chop;
     }
 
     // Combines a player's hand and the board into a 7-card hand for evaluation
@@ -99,7 +99,7 @@ public class HandResolver {
         var straightFlushStart = checkStraightFlush(suitCounts);
         var hasStraightFlush = straightFlushStart > 0;
         if (hasStraightFlush) {
-            return 8d + straightFlushStart;
+            return 8d + straightFlushStart / 20;
         }
 
         var flushKicker = checkHasFlush(suitCounts);
@@ -153,7 +153,7 @@ public class HandResolver {
         if (hasFourOfAKind) {
             return 7d + (fourValue / 20);
         } else if (hasFullHouse) {
-            return 6d;
+            return 6d + tripValue / 20 + pairedValue / 200;
         } else if (hasFlush) {
             return 5d + (flushKicker / 20);
         } else if (hasStraight) {
@@ -207,7 +207,7 @@ public class HandResolver {
         int maxValue = 0;
         for (var suitRanks : suitCounts.values()) {
             // If there's an ace, start the run at 1 (to account for A-5 flush)
-            var run = suitRanks[12];
+            var run = suitRanks[12] > 0 ? 1 : 0;
             for (var rank : suitRanks) {
                 if (rank > 0) {
                     run++;
@@ -259,7 +259,7 @@ public class HandResolver {
         }
 
         // If there's an ace, start the run at 1 (to account for A-5 flush)
-        var run = ranks[12];
+        var run = ranks[12] > 0 ? 1 : 0;
         var maxValue = 0;
         for (var rank : ranks) {
             if (rank > 0) {

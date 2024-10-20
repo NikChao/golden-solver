@@ -20,7 +20,7 @@ public class CrmSolver {
     }
 
     public Map<String, Map<String, double[]>> solve(CrmInput input) {
-        return solve(input, 10);
+        return solve(input, 50);
     }
 
     // The method that performs the CRM algorithm
@@ -171,7 +171,7 @@ public class CrmSolver {
         } else if (oopAction == 1 && ipAction == 0) { // OOP calls, IP folds
             return pot / 2.0;
         } else if (oopAction == 1 && ipAction == 1) { // Both call
-            return simulateShowdown(toHand(oopHand), toHand(ipHand), input.boardCards().split(","), pot);
+            return simulateShowdown(toHand(oopHand), toHand(ipHand), input.boardCards(), pot);
         } else if (oopAction == 2 || ipAction == 2) { // Raise involved
             return resolveBetting(input, oopPlayer, ipPlayer, oopBetSize, ipBetSize);
         }

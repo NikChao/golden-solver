@@ -1,5 +1,7 @@
 package org.goldenpath.solver.compute;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
 import java.util.ArrayList;
@@ -56,15 +58,28 @@ public class RangeProvider {
             inputDialog.setTitle("Frequency");
             inputDialog.setHeaderText("Enter frequency");
             inputDialog.setContentText("Frequency:");
+            Button okButton = (Button) inputDialog.getDialogPane().lookupButton(ButtonType.OK);
 
+            inputDialog.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+                okButton.setDisable(!isValidFrequency(newValue));
+            });
             var result = inputDialog.showAndWait();
 
             if (result.isPresent()) {
                 var handWithFreq = hand + ":" + result.get();
-                range += "," + handWithFreq;
+                if (range.length() > 0) {
+                    range += ",";
+                }
+                range += handWithFreq;
             }
         } else {
-            range = range.replace("," + matchingHandInRange.get() + ",", ",");
+            String handPattern = matchingHandInRange.get() + "(?::\\d+(\\.\\d+)?)?";
+
+            // Replace the hand and any trailing commas (for cleanliness)
+            range = range.replaceAll("\\b" + handPattern + "\\b,?", "")
+                    .replaceAll(",{2,}", ",")  // Remove double commas
+                    .replaceAll("^,|,$", "");  // Remove leading or trailing commas
+
         }
     }
 
@@ -99,5 +114,14 @@ public class RangeProvider {
             selectedHands.add(ALL_HANDS[i]);
         }
         return selectedHands;
+    }
+
+    private static boolean isValidFrequency(String input) {
+        try {
+            var value = Double.parseDouble(input);
+            return value > 0 && value <= 1;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
