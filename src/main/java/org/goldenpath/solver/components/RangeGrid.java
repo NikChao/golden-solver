@@ -93,7 +93,7 @@ public class RangeGrid {
 
 
         // Create a slider with a range from 1 to 100
-        var slider = new Slider(1, 100, initialPercentage);
+        var slider = new Slider(0, 100, initialPercentage);
         slider.setMinWidth(500);
         slider.setMaxWidth(500);
         slider.setShowTickLabels(true); // Show tick labels on the slider
@@ -132,7 +132,7 @@ public class RangeGrid {
                 });
 
                 var handLabel = new Label(hand);
-                handLabel.setStyle("-fx-font-weight: bold; -fx-alignment: CENTER;");
+                handLabel.setStyle("-fx-font-weight: semibold; -fx-alignment: CENTER; -fx-text-fill: black;");
 
                 handLabel.setMinSize(40, 20); // Set minimum size for labels
 

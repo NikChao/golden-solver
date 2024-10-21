@@ -27,6 +27,7 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:5.10.0")
 
     implementation("org.openjfx:javafx-controls:22.0.1")
+    implementation("io.github.mkpaz:atlantafx-base:2.0.0")
 }
 
 tasks.test {
@@ -38,7 +39,7 @@ application {
     mainModule.set("org.goldenpath.solver")
 }
 
-jlink {
+jlink{
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     launcher {
         name = "golden solver"
@@ -54,7 +55,8 @@ jlink {
             imageOptions.addAll(listOf(
                 "--mac-package-identifier", "org.goldenpath.solver",
                 "--mac-package-signing-prefix", "Developer ID Application",
-                "--icon", "src/main/resources/images/logo.jpeg"
+                "--icon", "/Users/nikolaichaourov/Documents/solver/src/main/resources/icon.icns",
+                "--type", "app-image"
             ))
         }
     }

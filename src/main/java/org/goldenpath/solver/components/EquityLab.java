@@ -27,7 +27,7 @@ public class EquityLab {
     }
 
     public Pane render() {
-        var container = new VBox(10);
+        var container = new VBox(24);
         container.setStyle("-fx-padding: 16;");
 
         var heroHand = new TextField("Qh,5d");

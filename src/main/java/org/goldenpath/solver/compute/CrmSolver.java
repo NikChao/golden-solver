@@ -25,7 +25,7 @@ public class CrmSolver {
     }
 
     public Map<String, Map<String, double[]>> solve() {
-        return solve(50);
+        return solve(5);
     }
 
     // The method that performs the CRM algorithm

@@ -1,5 +1,7 @@
 package org.goldenpath.solver.compute.model;
 
+import org.goldenpath.solver.data.CardProvider;
+
 import java.util.*;
 
 /**
@@ -75,7 +77,11 @@ public class GameTree {
 
         if (parent.lastPlayerToAct == parent.playerToAct && List.of(ActionType.CHECK, ActionType.CALL).contains(action.type)) {
             if (!street.RIVER.equals(street)) {
-                children = new GameTree[]{new GameTree(input, this, "2h")};
+                var cards = new String[]{"2h", "2d"};
+                children = new GameTree[cards.length];
+                for (int i = 0; i < cards.length; i++) {
+                    children[i] = new GameTree(input, this, "2h");
+                }
             }
             return;
         }
