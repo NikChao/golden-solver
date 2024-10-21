@@ -1,6 +1,7 @@
 package org.goldenpath.solver.compute;
 
 import org.goldenpath.solver.compute.model.CrmInput;
+import org.goldenpath.solver.compute.model.GameTree;
 import org.goldenpath.solver.compute.model.PlayerParams;
 
 import java.util.HashMap;
@@ -14,17 +15,21 @@ public class CrmSolver {
     private static final int NUM_ACTIONS = 3; // Fold, Call, Raise
 
     private final HandResolver handResolver;
+    private final CrmInput input;
+    private final GameTree gameTree;
 
-    public CrmSolver(HandResolver handResolver) {
+    public CrmSolver(HandResolver handResolver, CrmInput input, GameTree gameTree) {
         this.handResolver = handResolver;
+        this.input = input;
+        this.gameTree = gameTree;
     }
 
-    public Map<String, Map<String, double[]>> solve(CrmInput input) {
-        return solve(input, 50);
+    public Map<String, Map<String, double[]>> solve() {
+        return solve(50);
     }
 
     // The method that performs the CRM algorithm
-    public Map<String, Map<String, double[]>> solve(CrmInput input, int iterations) {
+    public Map<String, Map<String, double[]>> solve(int iterations) {
         var oopPlayer = input.players()[0];
         var ipPlayer = input.players()[1];
 

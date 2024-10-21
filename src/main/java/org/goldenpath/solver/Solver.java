@@ -13,6 +13,7 @@ import org.goldenpath.solver.compute.CrmSolver;
 import org.goldenpath.solver.compute.EquityCalculator;
 import org.goldenpath.solver.compute.HandResolver;
 import org.goldenpath.solver.compute.RangeProvider;
+import org.goldenpath.solver.compute.model.GameTree;
 import org.goldenpath.solver.data.CrmInputConverter;
 import org.goldenpath.solver.data.RangeConverter;
 
@@ -61,9 +62,10 @@ public class Solver extends Application {
                 alert.show();
                 return;
             }
-            var solver = new CrmSolver(new HandResolver());
             var solverInput = crmInputConverter.toCrmInput(oopRanges, oopParams, ipRanges, ipParams, otherParams, board);
-            var result = solver.solve(solverInput);
+            var gameTree = new GameTree(solverInput);
+            var solver = new CrmSolver(handResolver, solverInput, gameTree);
+            var result = solver.solve();
 
             var resultAlert = new Alert(Alert.AlertType.INFORMATION);
             resultAlert.setTitle("Solution");

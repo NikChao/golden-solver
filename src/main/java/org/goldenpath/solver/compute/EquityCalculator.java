@@ -1,7 +1,6 @@
 package org.goldenpath.solver.compute;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class EquityCalculator {
     private static final Character[] suits = new Character[]{'h', 'd', 'c', 's'};

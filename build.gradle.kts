@@ -2,6 +2,8 @@ plugins {
     id("java")
     application
     id("org.openjfx.javafxplugin") version "0.1.0"
+
+    id("org.beryx.jlink") version "3.0.1"
 }
 
 group = "org.goldenpath.solver"
@@ -32,5 +34,28 @@ tasks.test {
 }
 
 application {
-    mainClass.set("org.goldenpath.solver.Main") // Set the main class for the application
+    mainClass.set("org.goldenpath.solver.Main")
+    mainModule.set("org.goldenpath.solver")
+}
+
+jlink {
+    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+    launcher {
+        name = "golden solver"
+    }
+
+    jpackage {
+        if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+            installerOptions.addAll(listOf("--win-per-user-install", "--win-dir-chooser", "--win-menu", "--win-shortcut"))
+            imageOptions.addAll(listOf("--win-console"))
+        }
+        if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
+            installerOptions.addAll(listOf("--mac-package-name", "GoldenSolver", "--mac-sign", "--mac-bundle-identifier", "org.goldenpath.solver"))
+            imageOptions.addAll(listOf(
+                "--mac-package-identifier", "org.goldenpath.solver",
+                "--mac-package-signing-prefix", "Developer ID Application",
+                "--icon", "src/main/resources/images/logo.jpeg"
+            ))
+        }
+    }
 }
