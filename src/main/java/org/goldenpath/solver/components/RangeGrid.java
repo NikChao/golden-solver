@@ -8,6 +8,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import org.goldenpath.solver.compute.RangeProvider;
 
@@ -124,7 +125,7 @@ public class RangeGrid {
                 var stackPane = new StackPane();
                 var clip = new Rectangle(40, 20);
                 stackPane.setClip(clip);
-                stackPane.setStyle("-fx-border-color: darkgrey;");
+                stackPane.setStyle("-fx-border-color: #282a36;");
                 stackPane.setOnMouseClicked((MouseEvent event) -> {
                     ranges.toggleHand(hand);
                     updateAllStyles();
@@ -132,7 +133,7 @@ public class RangeGrid {
                 });
 
                 var handLabel = new Label(hand);
-                handLabel.setStyle("-fx-font-weight: semibold; -fx-alignment: CENTER; -fx-text-fill: black;");
+                handLabel.setStyle("-fx-font-weight: semibold; -fx-alignment: CENTER; -fx-text-fill: #f8f8f2;");
 
                 handLabel.setMinSize(40, 20); // Set minimum size for labels
 
@@ -159,7 +160,7 @@ public class RangeGrid {
 
                 // Background rectangle (unfilled part)
                 var background = new Rectangle(40, 20);
-                background.setFill(Color.LIGHTGRAY);
+                background.setFill(Paint.valueOf("#44475a"));
 
                 // Filled rectangle (to represent frequency, vertically)
                 var fill = new Rectangle(40, 20 * frequency); // Adjust height based on frequency
@@ -168,7 +169,7 @@ public class RangeGrid {
 
                 handLabel.stackPane.getChildren().setAll(background, fill, handLabel.label);
             } else {
-                handLabel.label.setStyle("-fx-background-color: grey; -fx-alignment: CENTER;");
+                handLabel.label.setStyle("-fx-background-color: #374151; -fx-alignment: CENTER;");
             }
 
         }

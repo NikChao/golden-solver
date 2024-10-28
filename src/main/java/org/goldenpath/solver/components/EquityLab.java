@@ -43,10 +43,20 @@ public class EquityLab {
         var findEquityButton = new Button("Find equity");
         var heroEquityLabel = new Label("Hero: ???");
         var villainEquityLabel = new Label("Villain: ???");
-        var chopLabel = new Label("Chop: ???");
-
         var equityContainer = new VBox(10);
-        equityContainer.getChildren().addAll(heroEquityLabel, villainEquityLabel, chopLabel);
+        var equityInnerContainer = new HBox(10);
+        var equityLabel = new Label("Equity");
+        equityInnerContainer.getChildren().addAll(heroEquityLabel, villainEquityLabel);
+        equityContainer.getChildren().addAll(equityLabel, equityInnerContainer);
+
+        var heroOddsLabel = new Label("Hero: ???");
+        var villainOddsLabel = new Label("Hero: ???");
+        var chopOddsLabel = new Label("Chop: ???");
+        var oddsContainer = new VBox(10);
+        var oddsInnerContainer = new HBox(10);
+        oddsInnerContainer.getChildren().addAll(heroOddsLabel, villainOddsLabel, chopOddsLabel);
+        var oddsLabel = new Label("Odds");
+        oddsContainer.getChildren().addAll(oddsLabel, oddsInnerContainer);
 
         var equityLabTitle = title();
 
@@ -56,7 +66,8 @@ public class EquityLab {
                 heroHandContainer,
                 boardContainer,
                 findEquityButton,
-                equityContainer);
+                equityContainer,
+                oddsContainer);
 
         findEquityButton.setOnMouseClicked(e -> {
             var villainSuitedRange = Arrays.stream(rangeConverter.toSuitedRange(villainRange.range)).map(handText -> new String[]{
@@ -70,9 +81,11 @@ public class EquityLab {
                     board.getText().split(",")
             );
 
-            heroEquityLabel.setText("Hero: " + equity[0]);
-            villainEquityLabel.setText("Villain: " + equity[1]);
-            chopLabel.setText("Chop: " + equity[2]);
+            heroOddsLabel.setText("Hero: " + round(equity[0]) + '%');
+            heroEquityLabel.setText("Hero: " + round(equity[0] + (equity[2] / 2)) + '%');
+            villainOddsLabel.setText("Villain: " + round(equity[1]) + '%');
+            villainEquityLabel.setText("Villain: " + round(equity[1] + (equity[2] / 2)) + '%');
+            chopOddsLabel.setText("Chop: " + round(equity[2]) + '%');
         });
 
         return container;
@@ -86,5 +99,9 @@ public class EquityLab {
         var title = new HBox(titleLeft, titleRight);
         title.setStyle("-fx-padding-top: 24px; -fx-padding-bottom: 24px;");
         return title;
+    }
+
+    private static double round(double value) {
+        return Math.round(value * 100);
     }
 }
