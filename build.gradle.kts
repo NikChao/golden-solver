@@ -31,6 +31,9 @@ dependencies {
 }
 
 tasks.test {
+    maxHeapSize = "4096m"  // Adjust to the memory needed, like "4g" or "8g"
+    jvmArgs = listOf("-Xms512m", "-Xmx4096m")
+
     useJUnitPlatform()
 }
 

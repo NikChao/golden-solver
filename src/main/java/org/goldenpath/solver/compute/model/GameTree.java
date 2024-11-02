@@ -77,9 +77,14 @@ public class GameTree {
 
         if (parent.lastPlayerToAct == parent.playerToAct && List.of(ActionType.CHECK, ActionType.CALL).contains(action.type)) {
             if (!street.RIVER.equals(street)) {
-                children = new GameTree[]{
-                        new GameTree(input, this, street.name())
-                };
+                var deck = CardProvider.getDeck(input.boardCards());
+
+                children = new GameTree[deck.length];
+
+                for (int i = 0; i < deck.length; i++) {
+                    children[i] = new GameTree(input, this, deck[i]);
+                }
+
             }
             return;
         }
@@ -115,7 +120,6 @@ public class GameTree {
             // TODO: support all in threshold
             playerActions.add(new Action(ActionType.CALL, betToMatch, null));
 
-            var hasAllInned = false;
             var previousRaiseCount = getPreviousRaiseCount(parent);
             if (previousRaiseCount < input.raiseLimit()) {
                 for (var raiseSize : getRaiseSizes(player, street)) {
@@ -123,7 +127,6 @@ public class GameTree {
                     var allinThreshold = player.stack() * input.allinThreshold();
                     if (absoluteBet >= allinThreshold) {
                         playerActions.add(new Action(ActionType.RAISE, player.stack(), null));
-                        hasAllInned = true;
                     } else {
                         playerActions.add(new Action(ActionType.RAISE, absoluteBet, null));
                     }

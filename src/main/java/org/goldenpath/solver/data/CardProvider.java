@@ -1,5 +1,7 @@
 package org.goldenpath.solver.data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CardProvider {
@@ -20,5 +22,9 @@ public class CardProvider {
         }
 
         return deck;
+    }
+
+    public static String[] getDeck(String[] exclude) {
+        return getDeck(Arrays.asList(exclude));
     }
 }
