@@ -1,0 +1,13 @@
+[
+  [
+    ["SB", 0.5],
+    ["BB", 1],
+    ["UTG", "FOLD"],
+    ["UTG1", "FOLD"],
+    ["UTG2", "FOLD"],
+    ["LJ", "FOLD"],
+    ["HJ", 2],
+    ["CO", "FOLD"],
+    ["!BTN", { "expected": ["CALL", 0.03], "alternatives":  [["FOLD", 0], ["ALLIN", -0.02]] } ]
+  ]
+]
