@@ -17,11 +17,13 @@ import org.goldenpath.solver.compute.RangeProvider;
 import org.goldenpath.solver.compute.model.GameTree;
 import org.goldenpath.solver.data.CrmInputConverter;
 import org.goldenpath.solver.data.RangeConverter;
+import org.goldenpath.solver.utils.AppIcon;
 
 public class Solver extends Application {
     private final RangeConverter rangeConverter = new RangeConverter();
     private final HandResolver handResolver = new HandResolver();
     private final CrmInputConverter crmInputConverter = new CrmInputConverter(rangeConverter);
+    private final AppIcon appIcon = new AppIcon();
 
     private final double initialOopRange = 30;
     private final double initialIpRange = 50;
@@ -110,12 +112,11 @@ public class Solver extends Application {
 
         var scene = new Scene(tabPane, 300, 200);
 
-        // Set up the stage (window)
+        appIcon.setAppIcon(icon, primaryStage);
         primaryStage.setTitle("Solver");
         primaryStage.setScene(scene);
         primaryStage.setHeight(840);
         primaryStage.setWidth(1300);
-        primaryStage.getIcons().add(icon);
         primaryStage.show();
     }
 

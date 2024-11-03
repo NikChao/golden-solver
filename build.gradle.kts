@@ -38,12 +38,16 @@ tasks.test {
 }
 
 tasks.withType(JavaExec::class) {
-    jvmArgs = listOf("-Xms512m", "-Xmx4096m")
+    jvmArgs = listOf("-Xms512m", "-Xmx4096m", "--add-exports", "java.desktop/com.apple.eawt=ALL-UNNAMED")
 }
 
 application {
     mainClass.set("org.goldenpath.solver.Main")
     mainModule.set("org.goldenpath.solver")
+    applicationDefaultJvmArgs = listOf(
+        "--add-exports", "java.desktop/com.apple.eawt=ALL-UNNAMED",
+        "-Dapple.awt.application.name=GoldenSolver"
+    )
 }
 
 jlink{
@@ -58,13 +62,22 @@ jlink{
             imageOptions.addAll(listOf("--win-console"))
         }
         if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
-            installerOptions.addAll(listOf("--mac-package-name", "GoldenSolver", "--mac-sign", "--mac-bundle-identifier", "org.goldenpath.solver"))
-            imageOptions.addAll(listOf(
-                "--mac-package-identifier", "org.goldenpath.solver",
-                "--mac-package-signing-prefix", "Developer ID Application",
-                "--icon", "/Users/nikolaichaourov/Documents/solver/src/main/resources/icon.icns",
-                "--type", "app-image"
-            ))
+            installerOptions.addAll(
+                listOf(
+                    "--mac-package-name", "GoldenSolver",
+                    "--mac-sign",
+                    "--mac-bundle-identifier", "org.goldenpath.solver",
+                    "--icon", "/Users/nikolaichaourov/Documents/solver/src/main/resources/icon.icns"
+                )
+            )
+            imageOptions.addAll(
+                listOf(
+                    "--mac-package-identifier", "org.goldenpath.solver",
+                    "--mac-package-signing-prefix", "Developer ID Application",
+                    "--icon", "/Users/nikolaichaourov/Documents/solver/src/main/resources/icon.icns",
+                    "--type", "dmg" // You can also use "pkg" or "app-image" as needed
+                )
+            )
         }
     }
 }

@@ -13,6 +13,11 @@ public class GameTreeTest {
             "9h9s,9d9c,9d9s,9c9s";
     private static final String[] TIGHT_RANGE = TIGHT_RANGE_TEXT.split(",");
 
+    /**
+     * Ran with profiler:
+     * * 4.44GB allocated
+     * * 1,660ms CPU time used
+     */
     @Test
     public void testGameTreeCanCheckThrough() {
         var oop = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
@@ -62,6 +67,11 @@ public class GameTreeTest {
         assertNull(ipCheckRiver.children);
     }
 
+    /**
+     * Ran with profiler:
+     * * 4.40GB allocated
+     * * 1,850ms CPU time used
+     */
     @Test
     public void testGameTreeCallStationPot() {
         var oop = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
@@ -115,6 +125,11 @@ public class GameTreeTest {
         assertEquals(ipCallRiver.pot, 204);
     }
 
+    /**
+     * Ran with profiler:
+     * * 3.69GB allocated
+     * * 1,591ms CPU time used
+     */
     @Test
     public void testGameTreeFourBetLimitWhenRaisingFlop() {
         var oop = new PlayerParams(TIGHT_RANGE, 200, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5}, new double[]{0.3, 0.6}, new double[]{0.5, 1.5});
