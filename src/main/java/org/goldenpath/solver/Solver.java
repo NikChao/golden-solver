@@ -18,9 +18,6 @@ import org.goldenpath.solver.compute.model.GameTree;
 import org.goldenpath.solver.data.CrmInputConverter;
 import org.goldenpath.solver.data.RangeConverter;
 
-import javax.swing.*;
-import java.lang.reflect.Method;
-
 public class Solver extends Application {
     private final RangeConverter rangeConverter = new RangeConverter();
     private final HandResolver handResolver = new HandResolver();
@@ -34,6 +31,7 @@ public class Solver extends Application {
 
     private final RangeGrid oopRangeGridProvider = new RangeGrid("Out of position", oopRanges, initialOopRange);
     private final RangeGrid ipRangeGridProvider = new RangeGrid("In position", ipRanges, initialIpRange);
+    private final Practice practice = new Practice();
 
     @Override
     public void start(Stage primaryStage) {
@@ -94,6 +92,11 @@ public class Solver extends Application {
         solverScrollPane.setFitToWidth(true);
         solverScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         solverScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        var solverTabPane = new TabPane();
+        solverTabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        var solverInputTab = new Tab("Input", solverScrollPane);
+        var solverSolutionTab = new Tab("Solution", solutionPane);
+        solverTabPane.getTabs().addAll(solverInputTab, solverSolutionTab);
 
         var equityCalculator = new EquityCalculator(handResolver);
         var villainRangeProvider = new RangeProvider();
@@ -101,9 +104,8 @@ public class Solver extends Application {
         var equityLab = new EquityLab(equityCalculator, villainRangeGrid, villainRangeProvider, rangeConverter);
 
         var equityTab = new Tab("Equity", equityLab.render());
-        var solverTab = new Tab("Solver", solverScrollPane);
-        var solutionTab = new Tab("Solution", solutionPane);
-        tabPane.getTabs().addAll(equityTab, solverTab, solutionTab);
+        var solverTab = new Tab("Solver", solverTabPane);
+        tabPane.getTabs().addAll(equityTab, solverTab, practice.tab());
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         var scene = new Scene(tabPane, 300, 200);
